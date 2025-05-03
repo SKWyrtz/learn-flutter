@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import '../models/guess.dart';
+import '../models/quiz.dart';
 import '../models/tank.dart';
 
-class GuessService {
-  Future<Guess> fetchGuess() async {
-    await Future.delayed(Duration(seconds: 1)); // simulate network delay
+class QuizService {
+  Future<Quiz> fetchQuiz() async {
+    await Future.delayed(Duration(milliseconds: 500)); // simulate network delay
 
     var correctTank = Tank("1", "Grant", "assets/images/tanks/grant.jpg");
     var tankList = [
@@ -16,6 +16,6 @@ class GuessService {
       Tank("4", "Sherman", "assets/images/tanks/sherman.jpg"),
     ];
 
-    return Guess(options: tankList, correctAnswer: correctTank);
+    return Quiz(options: tankList, correctAnswer: correctTank);
   }
 }

@@ -1,6 +1,6 @@
-import 'package:learn_flutter/src/models/guess_option.dart';
+import 'package:learn_flutter/src/models/quiz_option.dart';
 
-class Tank implements GuessOption {
+class Tank implements QuizOption {
   @override
   final String id;
   @override
