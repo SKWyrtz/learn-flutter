@@ -5,15 +5,6 @@ import '../../../models/tank.dart';
 import '../../../services/guess_api_service.dart';
 import '../../shared/background_container.dart';
 
-// var correctTank = Tank("1", "Grant", "assets/images/tanks/grant.jpg");
-// var tankList = [
-//   correctTank,
-//   Tank("2", "Panzer IV", "assets/images/tanks/panzer_iv.jpg"),
-//   Tank("3", "Panzer V (Panther)", "assets/images/tanks/panzer_v_panther.jpg"),
-//   Tank("4", "sherman", "assets/images/tanks/sherman.jpg"),
-// ];
-// Guess tankGuesses = Guess(options: tankList, correctAnswer: correctTank);
-
 class QuizView extends StatefulWidget {
   const QuizView({super.key});
   static const routeName = '/quiz';
@@ -23,8 +14,8 @@ class QuizView extends StatefulWidget {
 }
 
 class _QuizViewState extends State<QuizView> {
-  bool hasAnswered = false;
-  int? answerIndex;
+  QuizOption? selectedOption;
+  // int? answerIndex;
   late ThemeData theme;
 
   final QuizService _quizService = QuizService();
@@ -49,7 +40,7 @@ class _QuizViewState extends State<QuizView> {
 
     if (currentQuiz == null) {
       return Scaffold(
-        appBar: _buildAppBar(), //TODO: fix replicated code
+        appBar: _buildAppBar(),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
@@ -65,7 +56,7 @@ class _QuizViewState extends State<QuizView> {
               crossAxisCount: 2,
               children: [
                 ...currentQuiz!.options
-                    .map((tank) => _buildQuizOption(tank as Tank))
+                    .map((option) => _buildQuizOption(option as Tank))
               ]),
         ),
         Expanded(
@@ -85,7 +76,7 @@ class _QuizViewState extends State<QuizView> {
                             color: theme.colorScheme.onPrimary,
                             fontWeight: FontWeight.bold)),
                   ]),
-                  if (hasAnswered)
+                  if (selectedOption != null)
                     ElevatedButton(
                         onPressed: () => {print("skibidi")}, child: Text("BOB"))
                 ],
@@ -100,9 +91,9 @@ class _QuizViewState extends State<QuizView> {
   }
 
   Widget _buildQuizOption(Tank tank) {
-    final backgroundColor = hasAnswered
-        ? _colorQuizOption(tank, answerIndex!)
-        : theme.colorScheme.primary;
+    final backgroundColor = selectedOption == null
+        ? theme.colorScheme.primary
+        : _colorQuizOption(tank);
 
     return Card(
       margin: const EdgeInsets.all(5),
@@ -121,7 +112,7 @@ class _QuizViewState extends State<QuizView> {
                 child: Image.asset(tank.imagePath),
               ),
               const SizedBox(height: 10),
-              if (hasAnswered)
+              if (selectedOption != null)
                 Text(
                   tank.name,
                   style: TextStyle(color: theme.colorScheme.onPrimary),
@@ -133,10 +124,10 @@ class _QuizViewState extends State<QuizView> {
     );
   }
 
-  Color _colorQuizOption(QuizOption option, int answerIndex) {
+  Color _colorQuizOption(QuizOption option) {
     if (option == currentQuiz!.correctAnswer) {
       return Colors.green;
-    } else if (option == currentQuiz!.options[answerIndex]) {
+    } else if (option == selectedOption) {
       return Colors.red;
     }
     return theme.colorScheme.secondary;
@@ -146,8 +137,7 @@ class _QuizViewState extends State<QuizView> {
     final correctTank = currentQuiz!.correctAnswer;
     print(tank == correctTank ? "Correct!" : "Incorrect!");
     setState(() {
-      hasAnswered = true;
-      answerIndex = currentQuiz!.options.indexOf(tank);
+      selectedOption = tank;
     });
   }
 }
