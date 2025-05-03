@@ -14,15 +14,15 @@ import '../../shared/background_container.dart';
 // ];
 // Guess tankGuesses = Guess(options: tankList, correctAnswer: correctTank);
 
-class GuessView extends StatefulWidget {
-  const GuessView({super.key});
-  static const routeName = '/guess';
+class QuizView extends StatefulWidget {
+  const QuizView({super.key});
+  static const routeName = '/quiz';
 
   @override
-  State<GuessView> createState() => _GuessViewState();
+  State<QuizView> createState() => _QuizViewState();
 }
 
-class _GuessViewState extends State<GuessView> {
+class _QuizViewState extends State<QuizView> {
   bool hasAnswered = false;
   int? answerIndex;
   late ThemeData theme;
@@ -33,13 +33,13 @@ class _GuessViewState extends State<GuessView> {
   @override
   void initState() {
     super.initState();
-    _loadGuess();
+    _loadQuiz();
   }
 
-  void _loadGuess() async {
-    currentQuiz = await _quizService.fetchQuiz();
+  void _loadQuiz() async {
+    final quiz = await _quizService.fetchQuiz();
     setState(() {
-      currentQuiz = currentQuiz!;
+      currentQuiz = quiz;
     });
   }
 
@@ -49,16 +49,13 @@ class _GuessViewState extends State<GuessView> {
 
     if (currentQuiz == null) {
       return Scaffold(
-        appBar: AppBar(
-            title: const Text('Guess the Tank')), //TODO: fix replicated code
+        appBar: _buildAppBar(), //TODO: fix replicated code
         body: const Center(child: CircularProgressIndicator()),
       );
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Guess the Tank'),
-      ),
+      appBar: _buildAppBar(),
       body: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         Expanded(
           flex: 3,
@@ -98,52 +95,51 @@ class _GuessViewState extends State<GuessView> {
     );
   }
 
-  Widget _buildQuizOption(QuizOption tank) {
-    return Container(
-      child: Card(
-          margin: EdgeInsets.all(5),
-          color: hasAnswered
-              ? _colorQuizOption(tank, answerIndex!)
-              : theme.colorScheme.primary,
-          child: InkWell(
-            //TODO: Maybe not necessary wiht inkwell - use gesture detector
-            splashColor: theme.colorScheme.secondary,
-            borderRadius: BorderRadius.circular(12.0),
-            onTap: () {
-              _onOptionSelected(tank as Tank);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Center(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12.0),
-                    child: Image.asset(tank.imagePath),
-                  ),
-                  SizedBox(height: 10),
-                  if (hasAnswered)
-                    Text(
-                      tank.name,
-                      style: TextStyle(color: theme.colorScheme.onPrimary),
-                    )
-                ],
-              )),
-            ),
-            // My design code here
-          )),
+  AppBar _buildAppBar() {
+    return AppBar(title: const Text('Guess the Tank'));
+  }
+
+  Widget _buildQuizOption(Tank tank) {
+    final backgroundColor = hasAnswered
+        ? _colorQuizOption(tank, answerIndex!)
+        : theme.colorScheme.primary;
+
+    return Card(
+      margin: const EdgeInsets.all(5),
+      color: backgroundColor,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        splashColor: theme.colorScheme.secondary,
+        onTap: () => _onOptionSelected(tank),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(tank.imagePath),
+              ),
+              const SizedBox(height: 10),
+              if (hasAnswered)
+                Text(
+                  tank.name,
+                  style: TextStyle(color: theme.colorScheme.onPrimary),
+                ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
   Color _colorQuizOption(QuizOption option, int answerIndex) {
     if (option == currentQuiz!.correctAnswer) {
-      return Color.fromARGB(255, 31, 126, 34);
+      return Colors.green;
     } else if (option == currentQuiz!.options[answerIndex]) {
-      return Color.fromARGB(255, 255, 0, 0);
-    } else {
-      return theme.colorScheme.secondary;
+      return Colors.red;
     }
+    return theme.colorScheme.secondary;
   }
 
   void _onOptionSelected(Tank tank) {

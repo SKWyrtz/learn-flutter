@@ -7,5 +7,5 @@ class Quiz {
   Quiz({
     required this.options,
     required this.correctAnswer,
-  }) : assert(options.length == 4, 'Guess must have exactly 4 options');
+  }) : assert(options.length == 4, 'Options must have exactly 4 options');
 }

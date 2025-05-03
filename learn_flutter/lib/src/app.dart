@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:learn_flutter/src/widgets/views/guess/guess_view.dart';
+import 'package:learn_flutter/src/widgets/views/quiz/quiz_view.dart';
 import 'package:learn_flutter/src/widgets/views/menu/menu_view.dart';
 
 import 'sample_feature/sample_item_details_view.dart';
@@ -56,8 +56,8 @@ class MyApp extends StatelessWidget {
                   case SampleItemDetailsView.routeName:
                     return const SampleItemDetailsView();
                   case SampleItemListView.routeName:
-                  case GuessView.routeName:
-                    return const GuessView();
+                  case QuizView.routeName:
+                    return const QuizView();
                   default:
                     return const MenuWidget();
                 }
