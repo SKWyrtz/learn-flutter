@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:learn_flutter/src/widgets/guess/guess_view.dart';
-import 'package:learn_flutter/src/widgets/menu/menu_view.dart';
+import 'package:learn_flutter/src/widgets/views/guess/guess_view.dart';
+import 'package:learn_flutter/src/widgets/views/menu/menu_view.dart';
 
 import 'sample_feature/sample_item_details_view.dart';
 import 'sample_feature/sample_item_list_view.dart';
-import 'settings/settings_controller.dart';
-import 'settings/settings_view.dart';
+import 'providers/settings_controller.dart';
+import 'widgets/views/settings/settings_view.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
@@ -56,8 +56,8 @@ class MyApp extends StatelessWidget {
                   case SampleItemDetailsView.routeName:
                     return const SampleItemDetailsView();
                   case SampleItemListView.routeName:
-                  case GuessWidget.routeName:
-                    return const GuessWidget();
+                  case GuessView.routeName:
+                    return const GuessView();
                   default:
                     return const MenuWidget();
                 }

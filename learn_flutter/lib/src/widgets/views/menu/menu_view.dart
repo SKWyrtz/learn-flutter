@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../guess/guess_view.dart';
-import '../../settings/settings_view.dart';
-import '../shared/background_container.dart';
+import '../settings/settings_view.dart';
+import '../../shared/background_container.dart';
 
 class MenuWidget extends StatelessWidget {
   const MenuWidget({super.key});
@@ -33,7 +33,7 @@ class MenuWidget extends StatelessWidget {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.restorablePushNamed(context, GuessWidget.routeName);
+                  Navigator.restorablePushNamed(context, GuessView.routeName);
                 },
                 child: Text("Start Game"),
               ),
